@@ -12,19 +12,28 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 void Robot::RobotInit() {
+  std::cout << "Test 1" << std::endl;
+  
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+
+  joystick_1 = new frc::Joystick(0);
+
+  std::cout << "Motor Initialization" << std::endl;
 
   left_motor_1 = new WPI_TalonSRX(1);
   left_motor_2 = new WPI_TalonSRX(4);
 
   right_motor_1 = new WPI_TalonSRX(2);
   right_motor_2 = new WPI_TalonSRX(6);
+
+  std::cout << "Motors are initialized" << std::endl;
 }
 
 void Robot::DreadbotTankDrive(double y_axis, double rot_axis, bool turbo_button, bool turtle_button)
 {
+  std::cout << "whoa" << std::endl;
   // Remove any possibility of Joystick Deadband.
   // Essentially, if the joystick input is within
   // the range of the considered deadband (-0.2 to 0.2),
@@ -68,12 +77,12 @@ void Robot::DreadbotTankDrive(double y_axis, double rot_axis, bool turbo_button,
   left_final_speed = (left_final_speed < -1.0) ? -1.0 : left_final_speed;
   right_final_speed = (right_final_speed > 1.0) ? 1.0 : right_final_speed;
   right_final_speed = (right_final_speed < -1.0) ? -1.0 : right_final_speed;
-
+  
   // Set Motor Speeds to the final speeds calculated.
-  left_motor_1->Set(left_final_speed);
-  left_motor_2->Set(left_final_speed);
-  right_motor_1->Set(right_final_speed);
-  right_motor_2->Set(right_final_speed);
+  left_motor_1->Set(ControlMode::PercentOutput, left_final_speed);
+  left_motor_2->Set(ControlMode::PercentOutput, left_final_speed);
+  right_motor_1->Set(ControlMode::PercentOutput, right_final_speed);
+  right_motor_2->Set(ControlMode::PercentOutput, right_final_speed);
 }
 
 /**
@@ -122,6 +131,8 @@ void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic() 
 {
+  std::cout << "prewoah" << std::endl;
+
   DreadbotTankDrive(
     joystick_1->GetRawAxis(y_axis), 
     joystick_1->GetRawAxis(z_axis), 
